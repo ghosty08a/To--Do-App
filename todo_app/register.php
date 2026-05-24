@@ -1,18 +1,32 @@
 <?php
-include 'db.php';
+session_start();
+include 'config.php';
 
 if (isset($_POST['register'])) {
+
     $username = trim($_POST['username']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
+    $confirm  = $_POST['confirm_password'];
 
-    $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-    $stmt->bind_param("ss", $username, $password);
-
-    if ($stmt->execute()) {
-        header("Location: login.php");
-        exit();
+    if ($password !== $confirm) {
+        $error = "Passwords do not match!";
     } else {
-        $error = "Username already exists!";
+
+        // check if username exists
+        $check = $conn->query("SELECT id FROM users WHERE username='$username'");
+        
+        if ($check->num_rows > 0) {
+            $error = "Username already taken!";
+        } else {
+
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            $conn->query("INSERT INTO users (username, password) 
+                          VALUES ('$username', '$hashedPassword')");
+
+            header("Location: login.php");
+            exit();
+        }
     }
 }
 ?>
@@ -20,24 +34,62 @@ if (isset($_POST['register'])) {
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Create Account</title>
     <link rel="stylesheet" href="style.css">
-    <title>Register</title>
 </head>
-<body>
 
-<div class="auth-container">
-    <h2>Create Account</h2>
+<body class="auth-page">
 
-    <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+<div class="bg"></div>
 
-    <form method="POST">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit" name="register">Register</button>
-    </form>
+<div class="login-wrapper">
 
-    <p>Already have an account? <a href="login.php">Login</a></p>
+    <div class="login-card">
+
+        <h1>Create Account</h1>
+        <p>Sign up to start using the system</p>
+
+        <?php if (!empty($error)) { ?>
+            <p style="color:red; font-size:13px;"><?php echo $error; ?></p>
+        <?php } ?>
+
+        <form method="POST">
+
+            <div class="input-group">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+
+            <div class="input-group password-group">
+                <input type="password" name="password" id="password" required>
+                <label>Password</label>
+                <span onclick="togglePassword('password')">👁</span>
+            </div>
+
+            <div class="input-group password-group">
+                <input type="password" name="confirm_password" id="confirm_password" required>
+                <label>Confirm Password</label>
+                <span onclick="togglePassword('confirm_password')">👁</span>
+            </div>
+
+            <button type="submit" name="register">Create Account</button>
+
+        </form>
+
+        <p class="switch">
+            Already have an account? <a href="login.php">Login</a>
+        </p>
+
+    </div>
+
 </div>
+
+<script>
+function togglePassword(id) {
+    const field = document.getElementById(id);
+    field.type = field.type === "password" ? "text" : "password";
+}
+</script>
 
 </body>
 </html>
