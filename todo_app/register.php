@@ -1,34 +1,39 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+include 'db.php';
 
-    $users = json_decode(file_get_contents('users.json'), true);
+if (isset($_POST['register'])) {
+    $username = trim($_POST['username']);
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    $users[] = [
-        "username" => $_POST['username'],
-        "password" => password_hash($_POST['password'], PASSWORD_DEFAULT)
-    ];
+    $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+    $stmt->bind_param("ss", $username, $password);
 
-    file_put_contents('users.json', json_encode($users, JSON_PRETTY_PRINT));
-
-    header("Location: login.php");
+    if ($stmt->execute()) {
+        header("Location: login.php");
+        exit();
+    } else {
+        $error = "Username already exists!";
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" href="style.css">
     <title>Register</title>
-    <link rel="stylesheet" href="style.css?v=2">
 </head>
-<body class="auth-body">
+<body>
 
-<div class="auth-box">
-    <h2>Register</h2>
+<div class="auth-container">
+    <h2>Create Account</h2>
+
+    <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
 
     <form method="POST">
         <input type="text" name="username" placeholder="Username" required>
         <input type="password" name="password" placeholder="Password" required>
-        <button>Register</button>
+        <button type="submit" name="register">Register</button>
     </form>
 
     <p>Already have an account? <a href="login.php">Login</a></p>
