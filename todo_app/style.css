@@ -1,0 +1,161 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: #fff;
+}
+
+.app {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    background: #020617;
+    height: 100vh;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: #cbd5f5;
+    text-decoration: none;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.sidebar a:hover {
+    background: #1e293b;
+}
+
+.logout {
+    margin-top: 20px;
+    background: #ef4444;
+    color: white !important;
+    text-align: center;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    padding: 30px;
+}
+
+/* CARDS */
+.cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card {
+    flex: 1;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.blue { background: #3b82f6; }
+.green { background: #22c55e; }
+.orange { background: #f59e0b; }
+
+/* FORM */
+.add {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.add input, .add select {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+.add button {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* TASK LIST */
+.task-list {
+    display: grid;
+    gap: 15px;
+}
+
+/* TASK CARD */
+.task {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.task:hover {
+    transform: scale(1.02);
+}
+
+.task-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-meta {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #94a3b8;
+}
+
+/* PRIORITY COLORS */
+.priority-low { border-left: 5px solid #22c55e; }
+.priority-medium { border-left: 5px solid #f59e0b; }
+.priority-high { border-left: 5px solid #ef4444; }
+
+.priority {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: #334155;
+}
+
+/* DONE TASK */
+.task.done {
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+/* ACTIONS */
+.actions {
+    margin-top: 10px;
+}
+
+.actions a {
+    margin-right: 10px;
+    text-decoration: none;
+    padding: 5px 8px;
+    border-radius: 6px;
+}
+
+.done {
+    background: #22c55e;
+    color: white;
+}
+
+.delete {
+    background: #ef4444;
+    color: white;
+}
+.sidebar a.active {
+    background: #3b82f6;
+    color: white;
+}
